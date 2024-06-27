@@ -24,7 +24,7 @@ const Chat = () => {
         <div className='user'>
           <img src='./avatar.png' />
           <div className='texts'>
-            <spam>Bambam</spam>
+            <span>Bambam</span>
             <p>Hello</p>
           </div>
         </div>
