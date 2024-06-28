@@ -11,7 +11,7 @@ import { useChatStore } from './lib/chatStore'
 
 const App = () => {
 
-  const { currentUser, isLoding, fetchUserInfo } = useUserStore()
+  const { currentUser, isLoading, fetchUserInfo } = useUserStore()
   const { chatId } = useChatStore()
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const App = () => {
     }
   }, [fetchUserInfo])
 
-  if (isLoding) return <div className='loading'>Loading...</div>
+  if (isLoading) return <div className='loading'>Loading...</div>
 
   return (
     <div className='container'>
