@@ -42,7 +42,7 @@ const Login = () => {
             });
 
             await setDoc(doc(db, "userchats", res.user.uid), {
-                chat: [],
+                chats: [],
             });
 
             toast.success("Account created! You can login now!");

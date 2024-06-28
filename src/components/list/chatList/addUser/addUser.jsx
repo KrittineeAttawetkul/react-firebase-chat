@@ -1,26 +1,65 @@
 import React, { useState } from 'react'
 import './addUser.css'
-import {db} from '../../../../lib/firebase'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { db } from '../../../../lib/firebase'
+import { arrayUnion, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
+import { create } from 'zustand'
+import { useUserStore } from '../../../../lib/userStore'
 
 const AddUser = () => {
-  const [user,setUser] = useState(null)
+  const [user, setUser] = useState(null)
 
-  const handleSearch = async(e) => {
+  const { currentUser } = useUserStore()
+
+  const handleSearch = async (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const username = formData.get('username')
 
     try {
       const userRef = collection(db, "users");
-
       const q = query(userRef, where("username", "==", username));
 
       const querySanapShot = await getDocs(q);
 
-      if(!querySanapShot.empty){
+      if (!querySanapShot.empty) {
         setUser(querySanapShot.docs[0].data())
       }
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleAdd = async () => {
+    const chatRef = collection(db, 'chats')
+    const userChatsRef = collection(db, 'userchats')
+
+
+    try {
+      const newChatRef = doc(chatRef)
+
+      await setDoc(newChatRef, {
+        createAt: serverTimestamp(),
+        messages: [],
+      })
+      
+      await updateDoc(doc(userChatsRef, user.id), {
+        chats: arrayUnion({
+          chatId: newChatRef.id,
+          lastMessage: '',
+          receiverId: currentUser.id,
+          updatedAt: Date.now()
+        }),
+      })
+
+      await updateDoc(doc(userChatsRef, currentUser.id), {
+        chats: arrayUnion({
+          chatId: newChatRef.id,
+          lastMessage: '',
+          receiverId: user.id,
+          updatedAt: Date.now()
+        }),
+      })
 
     } catch (err) {
       console.log(err)
@@ -38,7 +77,7 @@ const AddUser = () => {
           <img src={user.avatar || './avatar.png'} />
           <span>{user.username}</span>
         </div>
-        <button>Add User</button>
+        <button onClick={handleAdd}>Add User</button>
       </div>}
     </div>
   )
