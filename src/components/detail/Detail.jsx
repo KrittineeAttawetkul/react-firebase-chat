@@ -3,7 +3,6 @@ import './detail.css'
 import { auth, db } from '../../lib/firebase'
 import { useChatStore } from '../../lib/chatStore'
 import { useUserStore } from '../../lib/userStore'
-import { update } from 'firebase/database'
 import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 
 const Detail = () => {
