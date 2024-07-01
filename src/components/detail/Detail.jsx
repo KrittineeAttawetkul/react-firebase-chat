@@ -5,8 +5,9 @@ import { useChatStore } from '../../lib/chatStore'
 import { useUserStore } from '../../lib/userStore'
 import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 
+
 const Detail = () => {
-  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked,changeBlock } = useChatStore();
   const { currentUser } = useUserStore()
 
   const handleBlock = async () => {
